@@ -2,24 +2,19 @@ package enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+public enum Strategy {
+    @JsonProperty("niceScoreCity")
+    NICE_SCORE_CITY("niceScoreCity"),
 
-public enum ElvesType {
+    @JsonProperty("id")
+    ID("id"),
 
-    @JsonProperty("yellow")
-    YELLOW("yellow"),
-
-    @JsonProperty("black")
-    BLACK("black"),
-
-    @JsonProperty("pink")
-    PINK("pink"),
-
-    @JsonProperty("white")
-    WHITE("white");
+    @JsonProperty("niceScore")
+    NICE_SCORE("niceScore");
 
     private String value;
 
-    ElvesType(final String value) {
+    Strategy(final String value) {
         this.value = value;
     }
 
@@ -28,8 +23,8 @@ public enum ElvesType {
      * @param value of the Enum
      * @return the Enum with the given value
      */
-    public static ElvesType getEnumByString(final String value) {
-        for (ElvesType e : ElvesType.values()) {
+    public static Strategy getEnumByString(final String value) {
+        for (Strategy e : Strategy.values()) {
             if (e.value.equals(value)) {
                 return e;
             }
