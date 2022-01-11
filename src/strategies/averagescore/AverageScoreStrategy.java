@@ -1,4 +1,4 @@
-package strategies;
+package strategies.averagescore;
 
 public interface AverageScoreStrategy<T> {
     /**

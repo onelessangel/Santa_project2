@@ -1,4 +1,4 @@
-package strategies;
+package strategies.averagescore;
 
 import java.util.ArrayList;
 
