@@ -1,12 +1,13 @@
 package simulation;
 
 import entities.Child;
-import enums.Category;
 import enums.ChildType;
 import databases.Database;
-import entities.Gift;
-import strategies.AverageScoreStrategy;
-import strategies.AverageScoreStrategyFactory;
+import enums.ElvesType;
+import strategies.averagescore.AverageScoreStrategy;
+import strategies.averagescore.AverageScoreStrategyFactory;
+import strategies.elves.ElfStrategyFactory;
+import strategies.years.YearStrategyFactory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,7 +25,10 @@ public final class Simulator {
         clearReceivedGifts();
         setAverageScore();
         setBudget();
+        applyBudgetElfModifications();
         assignGifts();
+        applyExtraGiftElfModifications();
+        sortDatabase();
     }
 
     private static void excludeYoungAdults() {
@@ -39,10 +43,14 @@ public final class Simulator {
 
     private static void setAverageScore() {
         AverageScoreStrategy<ArrayList<Double>> strategy;
+        Double averageScore;
 
         for (Child child : Database.getDatabase().getChildren()) {
             strategy = AverageScoreStrategyFactory.createStrategy(child.getChildType());
-            child.setAverageScore(strategy.getAverageScore(child.getNiceScoreHistory()));
+            averageScore = strategy.getAverageScore(child.getNiceScoreHistory());
+            averageScore += averageScore * child.getNiceScoreBonus() / 100;
+            averageScore = Math.min(averageScore, 10);
+            child.setAverageScore(averageScore);
         }
     }
 
@@ -59,26 +67,40 @@ public final class Simulator {
         }
     }
 
-    private static void assignGifts() {
-        double budget;
-        Gift gift;
-
+    private static void applyBudgetElfModifications() {
         for (Child child : Database.getDatabase().getChildren()) {
-            budget = child.getAssignedBudget();
+            ElvesType elfType = child.getElf();
 
-            for (Category category : child.getGiftsPreferences()) {
-                gift = Database.getDatabase().getGifts().stream()
-                        .filter(g -> g.getCategory().equals(category))
-                        .min(Comparator.comparing(Gift::getPrice))
-                        .orElse(null);
-
-                if (gift == null || gift.getPrice() > budget) {
-                    continue;
-                }
-
-                child.getReceivedGifts().add(gift);
-                budget -= gift.getPrice();
+            if (elfType.equals(ElvesType.WHITE) || elfType.equals(ElvesType.YELLOW)) {
+                continue;
             }
+
+            ElfStrategyFactory.createStrategy(elfType).makeChanges(child);
         }
+    }
+
+    private static void assignGifts() {
+        YearStrategyFactory.createStrategy(Database.getDatabase().getStrategy()).assignGifts();
+    }
+
+    private static void applyExtraGiftElfModifications() {
+        for (Child child : Database.getDatabase().getChildren()) {
+            if (!child.getReceivedGifts().isEmpty()) {
+                continue;
+            }
+
+            ElvesType elfType = child.getElf();
+
+            if (elfType.equals(ElvesType.WHITE) || elfType.equals(ElvesType.BLACK)
+                        || elfType.equals(ElvesType.PINK)) {
+                continue;
+            }
+
+            ElfStrategyFactory.createStrategy(elfType).makeChanges(child);
+        }
+    }
+
+    private static void sortDatabase() {
+        Database.getDatabase().getChildren().sort(Comparator.comparing(Child::getId));
     }
 }
