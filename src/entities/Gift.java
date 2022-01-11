@@ -6,11 +6,18 @@ public final class Gift {
     private final String productName;
     private final double price;
     private final Category category;
+    private int quantity;
 
-    public Gift(final String productName, final double price, final Category category) {
+    public Gift(final String productName, final double price, final Category category,
+                    final int quantity) {
         this.productName = productName;
         this.price = price;
         this.category = category;
+        this.quantity = quantity;
+    }
+
+    public void decreaseQuantity() {
+        quantity--;
     }
 
     public String getProductName() {
@@ -25,12 +32,17 @@ public final class Gift {
         return category;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
     @Override
     public String toString() {
         return "\nGift{"
-                + "productName='" + productName + '\''
+                + "productName='" + productName
                 + ", price=" + price
-                + ", category='" + category + '\''
+                + ", category='" + category
+                + ", quantity='" + quantity
                 + '}' + '\n';
     }
 }

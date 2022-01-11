@@ -3,8 +3,9 @@ package entities;
 import enums.Strategy;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
-public final class AnnualChange {
+public final class AnnualChange extends Observable {
     private final Double newSantaBudget;
     private final ArrayList<Gift> newGifts;
     private final ArrayList<ChildInputData> newChildren;

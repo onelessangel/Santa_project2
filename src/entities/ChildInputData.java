@@ -171,6 +171,10 @@ public class ChildInputData {
         this.giftsPreferences = giftsPreferences;
     }
 
+    public void setElf(ElvesType elf) {
+        this.elf = elf;
+    }
+
     /**
      * for checkstyle
      * Method used for debug.
@@ -179,10 +183,10 @@ public class ChildInputData {
     public String toString() {
         return "Child{"
                 + "id=" + id
-                + ", lastName='" + lastName + '\''
-                + ", firstName='" + firstName + '\''
+                + ", lastName=" + lastName
+                + ", firstName=" + firstName
                 + ", age=" + age
-                + ", city='" + city + '\''
+                + ", city=" + city
                 + ", niceScore=" + niceScore
                 + ", giftsPreferences=" + giftsPreferences
                 + ", niceScoreBonus=" + niceScoreBonus

@@ -150,8 +150,9 @@ public final class InputLoader {
         String productName = (String) giftObject.get(Constants.PRODUCT_NAME);
         double price       = ((Long)  giftObject.get(Constants.PRICE)).doubleValue();
         Category category  = Category.getEnumByString((String) giftObject.get(Constants.CATEGORY));
+        int quantity       = ((Long) giftObject.get(Constants.QUANTITY)).intValue();
 
-        return new Gift(productName, price, category);
+        return new Gift(productName, price, category, quantity);
     }
 
     private AnnualChange parseAnnualChangeObject(final JSONObject changeObject) {
