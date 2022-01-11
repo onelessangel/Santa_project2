@@ -8,14 +8,16 @@ import databases.Database;
 import entities.Gift;
 import enums.Category;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
-public final class Updater {
-    private Updater() {
-        // constructor for checkstyle
+public final class Updater extends Observable {
+    public Updater() {
+
+    }
+
+    public void notify(AnnualChange change) {
+        setChanged();
+        notifyObservers(change);
     }
 
     /**
@@ -27,24 +29,25 @@ public final class Updater {
         updateGifts(currentChange.getNewGifts());
         updateChildrenList(currentChange.getNewChildren());
         updateChildren(currentChange.getChildrenUpdates());
+        updateStrategy(currentChange);
     }
 
-    private static void updateBudget(final double newBudget) {
+    public static void updateBudget(final double newBudget) {
         Database.getDatabase().setSantaBudget(newBudget);
     }
 
-    private static void updateGifts(final ArrayList<Gift> newGifts) {
+    public static void updateGifts(final ArrayList<Gift> newGifts) {
         newGifts.forEach(gift -> Database.getDatabase().getGifts().add(gift));
     }
 
-    private static void updateChildrenList(final ArrayList<ChildInputData> newChildren) {
+    public static void updateChildrenList(final ArrayList<ChildInputData> newChildren) {
         Database.getDatabase().getChildren().forEach(entry -> {
             entry.increaseAge(); entry.setChildType(); });
         newChildren.forEach(child -> Database.getDatabase().getChildren().add(new Child(child)));
         Database.getDatabase().getChildren().sort(Comparator.comparing(Child::getId));
     }
 
-    private static void updateChildren(final ArrayList<ChildUpdate> childrenUpdates) {
+    public static void updateChildren(final ArrayList<ChildUpdate> childrenUpdates) {
         for (ChildUpdate update : childrenUpdates) {
             Child child = findChild(update.getId());
 
@@ -54,10 +57,12 @@ public final class Updater {
 
             updateNiceScore(child, update.getNiceScore());
             updateGiftsPreferences(child, update.getGiftsPreferences());
+
+            child.setElf(update.getElf());
         }
     }
 
-    private static Child findChild(final int id) {
+    public static Child findChild(final int id) {
         for (Child child : Database.getDatabase().getChildren()) {
             if (child.getId() != id) {
                 continue;
@@ -69,14 +74,14 @@ public final class Updater {
         return null;
     }
 
-    private static void updateNiceScore(final Child child, final Double newNiceScore) {
+    public static void updateNiceScore(final Child child, final Double newNiceScore) {
         if (newNiceScore == null) {
             return;
         }
         child.getNiceScoreHistory().add(newNiceScore);
     }
 
-    private static void updateGiftsPreferences(final Child child,
+    public static void updateGiftsPreferences(final Child child,
                                                final ArrayList<Category> newGiftsPreferences) {
         Set<Category> noDuplicatesList = new LinkedHashSet<>(newGiftsPreferences);
         newGiftsPreferences.clear();
@@ -86,5 +91,9 @@ public final class Updater {
 
         newGiftsPreferences.addAll(child.getGiftsPreferences());
         child.setGiftsPreferences(newGiftsPreferences);
+    }
+
+    public static void updateStrategy(final AnnualChange currentChange) {
+        Database.getDatabase().setStrategy(currentChange.getStrategy());
     }
 }
