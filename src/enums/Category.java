@@ -42,13 +42,4 @@ public enum Category {
 
         return null;
     }
-
-    /**
-     * Retrieves an Enum's value
-     * @return the Enum value
-     */
-    public String toString() {
-        return value;
-    }
-
 }
