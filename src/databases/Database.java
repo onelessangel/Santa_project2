@@ -1,15 +1,21 @@
 package databases;
 
+import entities.AnnualChange;
 import entities.Child;
 import entities.Gift;
+import enums.Strategy;
+import simulation.Updater;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public final class Database {
+public final class Database implements Observer {
     private int numberOfYears;
     private Double santaBudget;
     private ArrayList<Child> children;
     private ArrayList<Gift> gifts;
+    private Strategy strategy;
 
     // Singleton - Lazy Implementation
     private static Database instance = null;
@@ -48,6 +54,16 @@ public final class Database {
         Input.getInput().getInitialData().getChildren()
                 .forEach(child -> getDatabase().children.add(new Child(child)));
         Input.getInput().getInitialData().getGifts().forEach(gift -> getDatabase().gifts.add(gift));
+        getDatabase().strategy = Strategy.ID;
+    }
+
+    @Override
+    public void update(final Observable o, final Object change) {
+        Updater.updateBudget(((AnnualChange) change).getNewSantaBudget());
+        Updater.updateGifts(((AnnualChange) change).getNewGifts());
+        Updater.updateChildrenList(((AnnualChange) change).getNewChildren());
+        Updater.updateChildren(((AnnualChange) change).getChildrenUpdates());
+        Updater.updateStrategy(((AnnualChange) change));
     }
 
     public int getNumberOfYears() {
@@ -66,7 +82,15 @@ public final class Database {
         return gifts;
     }
 
+    public Strategy getStrategy() {
+        return strategy;
+    }
+
     public void setSantaBudget(final Double santaBudget) {
         this.santaBudget = santaBudget;
+    }
+
+    public void setStrategy(final Strategy strategy) {
+        this.strategy = strategy;
     }
 }
