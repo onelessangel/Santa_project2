@@ -19,8 +19,11 @@ public final class Manager {
 
         int yearsCounter = 0;
 
+        Updater updater = new Updater();
+        updater.addObserver(Database.getDatabase());
+
         for (AnnualChange change : Input.getInput().getAnnualChanges()) {
-            Updater.updateDatabase(change);
+            updater.notify(change);
             standardExecution();
 
             yearsCounter++;
