@@ -7,9 +7,9 @@ import enums.Category;
 
 import java.util.Comparator;
 
-public class YellowElfStrategy implements ElfStrategy {
+public final class YellowElfStrategy implements ElfStrategy {
     @Override
-    public void makeChanges(Child child) {
+    public void makeChanges(final Child child) {
         Category favoriteCategory = child.getGiftsPreferences().get(0);
         Gift extraGift = null;
         Database.getDatabase().getGifts().sort(Comparator.comparing(Gift::getPrice));

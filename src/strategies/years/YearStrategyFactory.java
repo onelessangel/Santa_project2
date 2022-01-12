@@ -7,6 +7,11 @@ public final class YearStrategyFactory {
         // constructor for checkstyle
     }
 
+    /**
+     * Creates a new strategy based on the strategy type.
+     * @param strategy given
+     * @return the correct strategy to be used
+     */
     public static YearStrategy createStrategy(final Strategy strategy) {
         switch (strategy) {
             case ID:              return new IdYearStrategy();

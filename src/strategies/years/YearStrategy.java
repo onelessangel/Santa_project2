@@ -10,8 +10,14 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public interface YearStrategy {
+    /**
+     * Assigns gifts to all the children in the database.
+     */
     void assignGifts();
 
+    /**
+     * Assigns gifts to a given child.
+     */
     static void assignGiftsToChild(Child child) {
         double budget = child.getAssignedBudget();
 

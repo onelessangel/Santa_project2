@@ -15,12 +15,12 @@ public final class Manager {
      * and updating the database when necessary.
      */
     public static void execute() {
-        standardExecution();
-
         int yearsCounter = 0;
 
         Updater updater = new Updater();
         updater.addObserver(Database.getDatabase());
+
+        standardExecution();
 
         for (AnnualChange change : Input.getInput().getAnnualChanges()) {
             updater.notify(change);

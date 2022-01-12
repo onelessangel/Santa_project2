@@ -1,5 +1,6 @@
 package simulation;
 
+import common.Constants;
 import entities.Child;
 import enums.ChildType;
 import databases.Database;
@@ -49,7 +50,7 @@ public final class Simulator {
             strategy = AverageScoreStrategyFactory.createStrategy(child.getChildType());
             averageScore = strategy.getAverageScore(child.getNiceScoreHistory());
             averageScore += averageScore * child.getNiceScoreBonus() / 100;
-            averageScore = Math.min(averageScore, 10);
+            averageScore = Math.min(averageScore, Constants.MAX_AVG_SCORE);
             child.setAverageScore(averageScore);
         }
     }

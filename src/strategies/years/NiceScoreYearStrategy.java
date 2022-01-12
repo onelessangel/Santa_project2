@@ -5,7 +5,7 @@ import entities.Child;
 
 import java.util.Comparator;
 
-public class NiceScoreYearStrategy implements YearStrategy {
+public final class NiceScoreYearStrategy implements YearStrategy {
     @Override
     public void assignGifts() {
         Database.getDatabase().getChildren().sort(Comparator

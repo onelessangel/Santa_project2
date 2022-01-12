@@ -2,9 +2,9 @@ package strategies.elves;
 
 import entities.Child;
 
-public class BlackElfStrategy implements ElfStrategy {
+public final class BlackElfStrategy implements ElfStrategy {
     @Override
-    public void makeChanges(Child child) {
+    public void makeChanges(final Child child) {
         child.setAssignedBudget(child.getAssignedBudget() - child.getAssignedBudget() * 30 / 100);
     }
 }

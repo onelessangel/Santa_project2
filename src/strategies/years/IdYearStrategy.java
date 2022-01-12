@@ -5,7 +5,7 @@ import entities.Child;
 
 import java.util.Comparator;
 
-public class IdYearStrategy implements YearStrategy {
+public final class IdYearStrategy implements YearStrategy {
     @Override
     public void assignGifts() {
         Database.getDatabase().getChildren().sort(Comparator.comparing(Child::getId));

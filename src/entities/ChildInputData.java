@@ -171,7 +171,11 @@ public class ChildInputData {
         this.giftsPreferences = giftsPreferences;
     }
 
-    public void setElf(ElvesType elf) {
+    /**
+     * for checkstyle
+     * Setter used to set the elf type.
+     */
+    public void setElf(final ElvesType elf) {
         this.elf = elf;
     }
 

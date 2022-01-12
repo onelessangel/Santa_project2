@@ -16,6 +16,9 @@ public final class Gift {
         this.quantity = quantity;
     }
 
+    /**
+     * Decreases gift quantity by one unit.
+     */
     public void decreaseQuantity() {
         quantity--;
     }
