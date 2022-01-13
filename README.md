@@ -1,74 +1,98 @@
-# Homeworks
-
-This repository contains (and is updated each university year):
-
- * content of each homework with detailed explanations of the assignments and automated checkers
- * media, such as photos or diagrams, that are used to better portrait examples as well as sources (where need-be - e.g. the UML diagrams can be exported to XML from [draw.io](https://www.draw.io/))
- * skeletons for homeworks which require a starting point
+Copyright Teodora Stroe 321CA 2022
 
 ## Repository folder structure
 
-The structure for a current homework is as follows:
+The structure of the current project is as follows:
 ```
-teme
-|
-|	--->	homework*X*-name  [1]
-|		|	--->	checker  [2]
-|		|	--->	media [3]
-|		|	--->	skel  [4]
-|		|		|	---> image-source [5]
-|		|	homework*X*-name  [6]
-|	--->	...
-|	--->	...
+    .
+    ├── .git
+    ├── src
+    │    ├── checker    [1]
+    │    ├── common     [2]
+    │    ├── databases  [3]
+    │    ├── entities   [4]
+    │    ├── enums      [5]
+    │    ├── fileio     [6]
+    │    ├── main       [7]
+    │    ├── simulation [8]
+    │    └── strategies [9]
+    │         ├── averagescore [10]
+    │         ├── elves        [11]
+    │         └── years        [12]
+    └── README.md
 ```
+* **[1]**  - package containing the checker files
+* **[2]**  - package containing used constants
+* **[3]**  - package containing both the Input Database and the Main Database
+* **[4]**  - package containing the classes used for children, updates, gifts and the initial data
+* **[5]**  - package containing enum classes used for constants
+* **[6]**  - package containing classes used for reading / writing the input / output
+* **[7]**  - package containing classes used for testing
+* **[8]**  - package containing classes used for executing the program
+* **[9]**  - package containing the used strategies
+* **[10]** - package containing the strategies used to compute the average score based
+* **[11]** - package containing the strategies for each elf type
+* **[12]** - package containing the used strategies for each type of year
 
-The structure for an old or deprecated homework is as follows:
-```
-old
-|	--->	university_year [7]
-|		|	--->	old_homework*X*-name  [1]
-|		|		|	--->	checker  [2]
-|		|		|	--->	media	[3]
-|		|		|	--->	skel	[4]
-|		|		|		|	---> image-source [5]
-|		|		|	old_homework*X*-name  [6]
-|		|	--->	...
-|		|	--->	...
-|	--->	...
-|	--->	...
-```
+## Phase 1
 
-* **[1]** - folder with the homework name and contents (where *X* is the homework number)
-* **[2]** - folder with the checker [if need-be]
-* **[3]** - folder with images and diagrams [if need-be]
-* **[4]** - folder with the skeleton code [if need-be]
-* **[5]** - folder with sources of the images/diagrams [if need-be]
-* **[6]** - file with homework details and exercises - docuwiki code (**must** be the same as the folder name)
-* **[7]** - folder with the university year in which the homework was due
+### Implementation
+The program uses 2 methods of testing:
+* Main class - used for testing the implementation on a set of multiple tests;
+* Test class - used to individually run the program, on a specific input file.
 
-## Contributing
+The program uses 2 databases:
+* Input - retains **all** the input data;
+* Database - retains the data used in the current round.
 
-If you are interested in fixing issues, detailing laboratory content or just want to lend a helping hand,
-please see the document [How to Contribute](CONTRIBUTING.md), which covers the following:
+The program uses 2 entities for *reading* and *writing* the data:
+* InputLoader - parses the input data into the Input Database;
+* OutputLoader - writes the result data into the correct output file.
 
-* [Coding Guidelines](CONTRIBUTING.md#coding-guidelines)
-* [Submitting pull requests](CONTRIBUTING.md#pull-requests)
+The **entry point** of the program's execution is the Manager class, which performs the following
+operations:
+* performs a **standard execution** for Round 0;
+* for each of the following years:
+    * updates the database;
+    * performs a standard execution for the current round.
 
-This organization has adopted the [Ethics regulation](http://wiki.cs.pub.ro/_media/studenti/licenta/regulament-comisie-de-etica-upb.pdf) and the [Code of Conduct for Students from the Faculty of Automation and Computers](http://wiki.cs.pub.ro/_media/studenti/licenta/cod-conduita-studenti-acs-.pdf). Failure to comply with or violate the rules set out in any of these documents will result in the sanctions imposed by UPB's internal regulations, such as reprimand, written warning, or expulsion from the University POLITEHNICA of Bucharest.
+A **standard execution** involves the *actual simulation* of the round and the *writing of the current
+data* into the OutputLoader.
+
+###Pattern usage
+
+A lazy implementation of the **Singleton Pattern** was used for the InputLoader, OutputLoader and the
+databases, because the program uses a single instance of each class in various places across the
+implementation.
+
+A combo of the **Strategy and Factory Patterns** was used in implementing the algorithm used to compute
+the average score based on the child type.
+
+## Phase 2
+
+### Implementation
+
+The *Simulation* class has been updated to apply the elf modifications, use different strategies to assign
+the gifts and to sort the children's list by ID at the end of each round.
+
+### Pattern Usage
+
+A **Builder Pattern** was used for the *ChildrenInputData* class and for the *AnnualChange* class, each having
+one or more optional properties.
+
+An **Observer Pattern** has been added to automatize the database notification process and to make it more efficient
+for the database to be updated. The *Updater* class has the role of being an *Observable*, and the *Database* class is
+an *Observer*.
+
+Combos of the **Strategy and Factory Patterns** have been added for the implementations of algorithms used for:
+* the action executed by each type of elf;
+* assigning gifts based on the strategy type of each year.
+
 
 ## Feedback
 
-* Ask a question on [the Moodle instance of our university](http://cs.curs.pub.ro/).
-* Request a new feature on [GitHub](CONTRIBUTING.md).
-* File a bug in [GitHub Issues](https://github.com/oop-pub/teme/issues).
-
-## Related repositories
-
-* [Laboratories](https://github.com/oop-pub/laboratoare) - content related to laboratories
-* [Wiki](https://github.com/oop-pub/wiki) - content from the [docuwiki instance](http://elf.cs.pub.ro/poo/)
+* There were untreated corner cases in the project documentation.
 
 ## License
 
 Licensed under the [MIT](LICENSE) License.
-
-
