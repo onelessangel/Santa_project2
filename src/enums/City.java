@@ -2,8 +2,7 @@ package enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public enum Cities {
-
+public enum City {
     @JsonProperty("Bucuresti")
     BUCURESTI("Bucuresti"),
 
@@ -36,7 +35,22 @@ public enum Cities {
 
     private String value;
 
-    Cities(final String value) {
+    City(final String value) {
         this.value = value;
+    }
+
+    /**
+     * Retrieves the Enum by value
+     * @param value of the Enum
+     * @return the Enum with the given value
+     */
+    public static City getEnumByString(final String value) {
+        for (City e : City.values()) {
+            if (e.value.equals(value)) {
+                return e;
+            }
+        }
+
+        return null;
     }
 }
